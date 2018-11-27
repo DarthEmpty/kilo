@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:date_format/date_format.dart';
 
 class Home extends StatefulWidget {
   Home({Key key, this.title}) : super(key: key);
@@ -32,6 +33,10 @@ class _HomeState extends State<Home> {
     });
   }
 
+  String _asDateString(DateTime datetime) {
+    return formatDate(datetime, [dd, "/", mm, "/", yy]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,22 +48,22 @@ class _HomeState extends State<Home> {
           Card(
             child: ListTile(
               leading: Icon(Icons.account_box),
-              title: Text("Account Box"),
-              subtitle: Text("Can't get enough of 'em"),
+              title: Text("Leg Day!"),
+              subtitle: Text(_asDateString(DateTime(2018, 1, 1))),
             ),
           ),
           Card(
             child: ListTile(
               leading: Icon(Icons.phone_android),
-              title: Text("Phone"),
-              subtitle: Text("Thanks, Alexander Grand Bell!"),
+              title: Text("Chest, Tris and Shoulders"),
+              subtitle: Text(_asDateString(DateTime(2018, 7, 14))),
             ),
           ),
           Card(
             child: ListTile(
               leading: Icon(Icons.bookmark),
-              title: Text("Bookmark"),
-              subtitle: Text("Let's not forget this..."),
+              title: Text("Bis, Back and Traps"),
+              subtitle: Text(_asDateString(DateTime(2018, 12, 31))),
             ),
           ),
         ],
