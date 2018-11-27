@@ -20,20 +20,56 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int _counter = 0;
+  bool _hasContent = false;
+  Widget _content;
 
-  void _incrementCounter() {
+
+  void _toggleContent() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      this._hasContent = !this._hasContent;
+      if (this._hasContent) {
+        this._content = ListView(
+          children: [
+            Card(
+              child: ListTile(
+                leading: Icon(Icons.airline_seat_legroom_normal),
+                title: Text("Leg Day!"),
+                subtitle: Text(this._toDateString(DateTime(2018, 1, 1))),
+              ),
+            ),
+            Card(
+              child: ListTile(
+                leading: Icon(Icons.phone_android),
+                title: Text("Chest, Tris and Shoulders"),
+                subtitle: Text(this._toDateString(DateTime(2018, 7, 14))),
+              ),
+            ),
+            Card(
+              child: ListTile(
+                leading: Icon(Icons.bookmark),
+                title: Text("Bis, Back and Traps"),
+                subtitle: Text(this._toDateString(DateTime(2018, 12, 31))),
+              ),
+            ),
+          ]
+        );
+      }
+
+      else {
+        this._content = Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text("Welcome to the start of your gym record!"),
+              Text("Press the button in the bottom right to get started")
+            ],
+          ),
+        );
+      }
     });
   }
 
-  String _asDateString(DateTime datetime) {
+  String _toDateString(DateTime datetime) {
     return formatDate(datetime, [dd, "/", mm, "/", yy]);
   }
 
@@ -43,35 +79,11 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: ListView(
-        children: <Widget>[
-          Card(
-            child: ListTile(
-              leading: Icon(Icons.account_box),
-              title: Text("Leg Day!"),
-              subtitle: Text(_asDateString(DateTime(2018, 1, 1))),
-            ),
-          ),
-          Card(
-            child: ListTile(
-              leading: Icon(Icons.phone_android),
-              title: Text("Chest, Tris and Shoulders"),
-              subtitle: Text(_asDateString(DateTime(2018, 7, 14))),
-            ),
-          ),
-          Card(
-            child: ListTile(
-              leading: Icon(Icons.bookmark),
-              title: Text("Bis, Back and Traps"),
-              subtitle: Text(_asDateString(DateTime(2018, 12, 31))),
-            ),
-          ),
-        ],
-      ),
+      body: this._content,
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
+        onPressed: this._toggleContent,
+        tooltip: 'Toggle Content On/Off',
+        child: Icon(Icons.swap_horiz),
       ),
     );
   }
