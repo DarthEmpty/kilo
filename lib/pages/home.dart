@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:date_format/date_format.dart';
+import 'package:kilo/utils/card_factory.dart';
+
 
 class Home extends StatefulWidget {
   Home({Key key, this.title}) : super(key: key);
@@ -25,76 +26,34 @@ class _HomeState extends State<Home> {
 
 
   void _toggleContent() {
+    CardFactory cardFactory = CardFactory();
+
     setState(() {
       this._hasContent = !this._hasContent;
       if (this._hasContent) {
         this._content = ListView(
           children: [
-            Card(
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: ListTile(
-                      leading: Icon(Icons.airline_seat_legroom_normal),
-                      title: Text("Leg Day!"),
-                      subtitle: Text(
-                          this._toDateString(DateTime(2018, 1, 1))
-                              + " with Joel, Arran"
-                      ),
-                    )
-                  ),
-                  IconButton(
-                      onPressed: null,
-                      icon: Icon(Icons.open_in_new),
-                  ),
-                ],
-              )
+            cardFactory.buildCard(
+              "Leg Day",
+              Icons.airline_seat_legroom_normal,
+              DateTime(2018, 1, 1),
+              "with Arran, Joel",
             ),
-            Card(
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                        child: ListTile(
-                          leading: Icon(Icons.phone_android),
-                          title: Text("Chest, Tris and Shoulders"),
-                          subtitle: Text(
-                              this._toDateString(DateTime(2018, 1, 1))
-                                  + " with Joel, Arran"
-                          ),
-                        )
-                    ),
-                    IconButton(
-                        onPressed: null,
-                        icon: Icon(Icons.open_in_new),
-                    ),
-                  ],
-                )
+            cardFactory.buildCard(
+              "Chest, Tris and Shoulders",
+              Icons.phone_android,
+              DateTime(2018, 7, 14),
+              "with Arran",
             ),
-            Card(
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                        child: ListTile(
-                          leading: Icon(Icons.bookmark),
-                          title: Text("Bis, Back and Traps"),
-                          subtitle: Text(
-                              this._toDateString(DateTime(2018, 1, 1))
-                                  + " with Joel, Arran"
-                          ),
-                        )
-                    ),
-                    IconButton(
-                        onPressed: null,
-                        icon: Icon(Icons.open_in_new),
-                    ),
-                  ],
-                )
+            cardFactory.buildCard(
+              "Bis, Back and Traps",
+              Icons.bookmark,
+              DateTime(2018, 12, 31),
+              "with Joel",
             ),
           ]
         );
-      }
-
-      else {
+      } else {
         this._content = Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -106,10 +65,6 @@ class _HomeState extends State<Home> {
         );
       }
     });
-  }
-
-  String _toDateString(DateTime datetime) {
-    return formatDate(datetime, [dd, "/", mm, "/", yy]);
   }
 
   @override
