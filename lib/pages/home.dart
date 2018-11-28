@@ -31,25 +31,64 @@ class _HomeState extends State<Home> {
         this._content = ListView(
           children: [
             Card(
-              child: ListTile(
-                leading: Icon(Icons.airline_seat_legroom_normal),
-                title: Text("Leg Day!"),
-                subtitle: Text(this._toDateString(DateTime(2018, 1, 1))),
-              ),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: ListTile(
+                      leading: Icon(Icons.airline_seat_legroom_normal),
+                      title: Text("Leg Day!"),
+                      subtitle: Text(
+                          this._toDateString(DateTime(2018, 1, 1))
+                              + " with Joel, Arran"
+                      ),
+                    )
+                  ),
+                  IconButton(
+                      onPressed: null,
+                      icon: Icon(Icons.open_in_new),
+                  ),
+                ],
+              )
             ),
             Card(
-              child: ListTile(
-                leading: Icon(Icons.phone_android),
-                title: Text("Chest, Tris and Shoulders"),
-                subtitle: Text(this._toDateString(DateTime(2018, 7, 14))),
-              ),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                        child: ListTile(
+                          leading: Icon(Icons.phone_android),
+                          title: Text("Chest, Tris and Shoulders"),
+                          subtitle: Text(
+                              this._toDateString(DateTime(2018, 1, 1))
+                                  + " with Joel, Arran"
+                          ),
+                        )
+                    ),
+                    IconButton(
+                        onPressed: null,
+                        icon: Icon(Icons.open_in_new),
+                    ),
+                  ],
+                )
             ),
             Card(
-              child: ListTile(
-                leading: Icon(Icons.bookmark),
-                title: Text("Bis, Back and Traps"),
-                subtitle: Text(this._toDateString(DateTime(2018, 12, 31))),
-              ),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                        child: ListTile(
+                          leading: Icon(Icons.bookmark),
+                          title: Text("Bis, Back and Traps"),
+                          subtitle: Text(
+                              this._toDateString(DateTime(2018, 1, 1))
+                                  + " with Joel, Arran"
+                          ),
+                        )
+                    ),
+                    IconButton(
+                        onPressed: null,
+                        icon: Icon(Icons.open_in_new),
+                    ),
+                  ],
+                )
             ),
           ]
         );
