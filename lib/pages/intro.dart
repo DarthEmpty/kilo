@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kilo/pages/home.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 
 class Intro extends StatelessWidget {
   void _toHome(BuildContext context) {
@@ -24,7 +26,7 @@ class Intro extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () => this._toHome(context),
         tooltip: "Go Home",
-        child: Icon(Icons.home),
+        child: Icon(FontAwesomeIcons.home),
       ),
     );
   }
