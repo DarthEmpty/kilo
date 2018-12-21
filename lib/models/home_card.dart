@@ -33,7 +33,7 @@ class HomeCard extends Card {
   factory HomeCard.fromJson(Map<String, dynamic> json) {
     return HomeCard(
       title: json["title"] as String,
-      date: DateTime.fromMillisecondsSinceEpoch(json["date"] as int),
+      date: DateTime.fromMillisecondsSinceEpoch(json["date"]),
       subtitle: json["subtitle"] as String,
     );
   }

@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:kilo/utils/home_card.dart';
+import 'package:kilo/models/home_card.dart';
+import 'package:kilo/models/http_client.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 
@@ -15,38 +16,33 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  List items = [];
+  HTTPClient client = HTTPClient("35.178.208.241:80");
+
   void _toIntro(BuildContext context) => Navigator.pop(context);
+
+  void _requestItems() async {
+    Map<String, dynamic> res = await client.get("card_details", "test_hash", "pass");
+    setState(() => this.items = res["_items"]);
+  }
 
   @override
   Widget build(BuildContext context) {
-    print(json.encode(HomeCard(
-      title: "Leg Day",
-      date: DateTime(2018, 1, 1),
-      subtitle: "with Arran, Joel",
-    )));
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: ListView(
-        children: [
-          HomeCard(
-            title: "Leg Day",
-            date: DateTime(2018, 1, 1),
-            subtitle: "with Arran, Joel",
-          ),
-          HomeCard(
-            title: "Chest, Tris and Shoulders",
-            date: DateTime(2018, 7, 14),
-            subtitle: "with Arran",
-          ),
-          HomeCard(
-            title: "Bis, Back and Traps",
-            date: DateTime(2018, 12, 31),
-            subtitle: "with Joel",
-          ),
-        ]
+      body: ListView.builder(
+        itemBuilder: (context, i) {
+          if (i >= this.items.length) {
+            if (this.items.isEmpty) {
+              this._requestItems();
+            }
+            return null;
+          }
+
+          return HomeCard.fromJson(this.items[i]);
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => this._toIntro(context),
