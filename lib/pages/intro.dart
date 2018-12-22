@@ -7,7 +7,7 @@ class Intro extends StatelessWidget {
   void _toHome(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Home(title: "Kilo",))
+      MaterialPageRoute(builder: (context) => Home())
     );
   }
 
