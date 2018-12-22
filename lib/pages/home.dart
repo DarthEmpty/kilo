@@ -23,6 +23,7 @@ class _HomeState extends State<Home> {
 
   void _requestItems() async {
     Map<String, dynamic> res = await client.get("card_details", "test_hash", "pass");
+    res["_items"].sort((a, b) => a["date"].compareTo(b["date"]) as int);
     setState(() => this.items = res["_items"]);
   }
 
