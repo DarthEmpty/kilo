@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:kilo/models/home_card.dart';
 import 'package:kilo/models/http_client.dart';
+import 'package:kilo/pages/session_form.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 
@@ -19,7 +20,10 @@ class _HomeState extends State<Home> {
   List items = [];
   HTTPClient client = HTTPClient("35.178.208.241:80");
 
-  void _toIntro(BuildContext context) => Navigator.pop(context);
+  void _toSessionForm(BuildContext context) => Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SessionForm())
+  );
 
   void _requestItems() async {
     Map<String, dynamic> res = await client.get("card_details", "test_hash", "pass");
@@ -46,9 +50,9 @@ class _HomeState extends State<Home> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => this._toIntro(context),
-        tooltip: 'Toggle Content On/Off',
-        child: Icon(FontAwesomeIcons.exchangeAlt),
+        child: Icon(FontAwesomeIcons.plus),
+        tooltip: 'Create a new session',
+        onPressed: () => this._toSessionForm(context),
       ),
     );
   }
