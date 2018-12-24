@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:kilo/models/home_card.dart';
 import 'package:kilo/models/http_client.dart';
@@ -8,9 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 
 class Home extends StatefulWidget {
-  final String title;
-
-  Home({Key key, this.title}) : super(key: key);
+  final String title = "Kilo";
 
   @override
   _HomeState createState() => _HomeState();
@@ -35,7 +31,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(this.widget.title),
       ),
       body: ListView.builder(
         itemBuilder: (context, i) {
