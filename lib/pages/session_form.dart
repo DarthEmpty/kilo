@@ -17,11 +17,12 @@ class _SessionFormState extends State<SessionForm> {
   void _toHome(BuildContext context) => Navigator.pop(context);
 
   Future _chooseDate() async {
+    final now = DateTime.now();
     DateTime date = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now().subtract(Duration(days: 365)),
-      lastDate: DateTime.now()
+      initialDate: now,
+      firstDate: now.subtract(Duration(days: 365)),
+      lastDate: now
     );
 
     if (date != null) {
@@ -55,7 +56,7 @@ class _SessionFormState extends State<SessionForm> {
             Text(this._dateString),
             IconButton(
                 icon: Icon(FontAwesomeIcons.calendarAlt),
-                onPressed: _chooseDate,
+                onPressed: this._chooseDate,
             ),
             IconButton(
               icon: Icon(FontAwesomeIcons.check),
