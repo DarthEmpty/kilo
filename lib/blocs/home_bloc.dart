@@ -1,27 +1,35 @@
-import 'package:rxdart/rxdart.dart';
-import 'package:kilo/models/home_card.dart';
+import 'package:bloc/bloc.dart';
 import 'package:kilo/models/http_client.dart';
+import 'package:meta/meta.dart';
 
 
-class HomeBloc {
-  HTTPClient _client = HTTPClient("35.178.208.241:80");
-  PublishSubject<List<HomeCard>> _source = PublishSubject<List<HomeCard>>();
+// region Events
+abstract class HomeEvent {}
 
-  Observable<List<HomeCard>> get homeCardStream => this._source.stream;
+class Populate extends HomeEvent {
+  final String username;
+  final String password;
+  Populate({@required this.username, @required this.password});
+}
+// endregion
 
-  void dispose() => this._source.close();
+class HomeBloc extends Bloc<HomeEvent, List>{
+  @override
+  List get initialState => [];
 
-  void fetchAllItems(String username, String password) async {
-    Map<String, dynamic> json = await this._client.get(
-        "card_details", username, password
-    );
-    json["_items"].sort((a, b) => a["date"].compareTo(b["date"]) as int);
+  @override
+  Stream<List> mapEventToState(List currentState, HomeEvent event) async* {
+    if (event is Populate) {
+      HTTPClient client = HTTPClient("35.178.208.241:80");
+      Map<String, dynamic> json = await client.get(
+          "card_details",
+          event.username,
+          event.password
+      );
 
-    List<HomeCard> cards = [];
-    for (dynamic item in json["_items"]) {
-      cards.add(HomeCard.fromJson(item));
+      json["_items"].sort((a, b) => a["date"].compareTo(b["date"]) as int);
+
+      yield json["_items"];
     }
-
-    this._source.add(cards);
   }
 }
