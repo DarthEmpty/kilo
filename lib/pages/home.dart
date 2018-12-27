@@ -6,31 +6,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kilo/models/home_card.dart';
 
 
-class Home extends StatefulWidget {
+class HomePage extends StatefulWidget {
   final String title = "Kilo";
 
   @override
-  State<Home> createState() => _HomeState();
+  State<HomePage> createState() => _HomePageState();
 }
 
 
-class _HomeState extends State<Home> {
+class _HomePageState extends State<HomePage> {
   final HomeBloc _bloc = HomeBloc();
 
   void _toSessionForm(BuildContext context) => Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SessionForm())
+      MaterialPageRoute(builder: (context) => SessionFormPage())
   );
 
-  ListView _buildList(List state) {
+  ListView _buildList(HomeState state) {
     return ListView.builder(
-      itemCount: state.length,
+      itemCount: state.items.length,
       itemBuilder: (BuildContext context, int i) {
-        if (state.isEmpty) {
+        if (state.items.isEmpty) {
           return Center(child: CircularProgressIndicator());
         }
 
-        return HomeCard.fromJson(state[i]);
+        return HomeCard.fromJson(state.items[i]);
       }
     );
   }
@@ -50,7 +50,7 @@ class _HomeState extends State<Home> {
 
       body: BlocBuilder(
         bloc: this._bloc,
-        builder: (BuildContext context, List state) => this._buildList(state)
+        builder: (BuildContext context, HomeState state) => this._buildList(state)
       ),
 
       floatingActionButton: FloatingActionButton(

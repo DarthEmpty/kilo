@@ -3,6 +3,14 @@ import 'package:kilo/models/http_client.dart';
 import 'package:meta/meta.dart';
 
 
+class HomeState {
+  final List items;
+
+  HomeState(this.items);
+
+  factory HomeState.initial() => HomeState([]);
+}
+
 // region Events
 abstract class HomeEvent {}
 
@@ -13,12 +21,12 @@ class Populate extends HomeEvent {
 }
 // endregion
 
-class HomeBloc extends Bloc<HomeEvent, List>{
+class HomeBloc extends Bloc<HomeEvent, HomeState>{
   @override
-  List get initialState => [];
+  HomeState get initialState => HomeState.initial();
 
   @override
-  Stream<List> mapEventToState(List currentState, HomeEvent event) async* {
+  Stream<HomeState> mapEventToState(HomeState currentState, HomeEvent event) async* {
     if (event is Populate) {
       HTTPClient client = HTTPClient("35.178.208.241:80");
       Map<String, dynamic> json = await client.get(
@@ -29,7 +37,7 @@ class HomeBloc extends Bloc<HomeEvent, List>{
 
       json["_items"].sort((a, b) => a["date"].compareTo(b["date"]) as int);
 
-      yield json["_items"];
+      yield HomeState(json["_items"]);
     }
   }
 }

@@ -3,14 +3,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kilo/utils.dart';
 
 
-class SessionForm extends StatefulWidget {
+class SessionFormPage extends StatefulWidget {
   final String title = "Session Form";
 
   @override
-  _SessionFormState createState() => _SessionFormState();
+  _SessionFormPageState createState() => _SessionFormPageState();
 }
 
-class _SessionFormState extends State<SessionForm> {
+class _SessionFormPageState extends State<SessionFormPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String _dateString = toDateString(DateTime.now());
 
