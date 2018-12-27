@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kilo/pages/home.dart';
+import 'package:kilo/pages/home_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 
