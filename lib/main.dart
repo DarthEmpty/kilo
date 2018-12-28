@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kilo/pages/intro.dart';
+import 'package:kilo/pages/intro_page.dart';
 
 void main() => runApp(Kilo());
 
@@ -12,7 +12,7 @@ class Kilo extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Intro(),
+      home: IntroPage(),
     );
   }
 }
