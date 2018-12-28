@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kilo/blocs/session_form_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kilo/utils.dart';
 
 
@@ -12,22 +14,72 @@ class SessionFormPage extends StatefulWidget {
 
 class _SessionFormPageState extends State<SessionFormPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String _dateString = toDateString(DateTime.now());
+  final SessionFormBloc _bloc = SessionFormBloc();
+  final TextEditingController _titleController = TextEditingController();
 
   void _toHome(BuildContext context) => Navigator.pop(context);
 
+  void _updateTitle() =>
+    this._bloc.dispatch(UpdateTitle(this._titleController.value.toString()));
+
   Future _chooseDate() async {
-    final now = DateTime.now();
-    DateTime date = await showDatePicker(
+    DateTime now = DateTime.now();
+    DateTime newDate = await showDatePicker(
       context: context,
       initialDate: now,
       firstDate: now.subtract(Duration(days: 365)),
       lastDate: now
     );
 
-    if (date != null) {
-      setState(() => this._dateString = toDateString(date));
+    if (newDate != null) {
+      this._bloc.dispatch(UpdateDate(newDate));
     }
+  }
+
+  Form _buildForm(SessionFormState state) {
+    return Form(
+      key: this._formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          TextFormField(
+            decoration: InputDecoration(labelText: "Title",),
+            controller: this._titleController,
+            validator: (value) {
+              if (value.isEmpty) {
+                return "Please enter some text";
+              }
+            },
+          ),
+          Text(toDateString(state.date)),
+          IconButton(
+            icon: Icon(FontAwesomeIcons.calendarAlt),
+            onPressed: this._chooseDate,
+          ),
+          IconButton(
+            icon: Icon(FontAwesomeIcons.check),
+            onPressed: () {
+              if (this._formKey.currentState.validate()) {
+                this._toHome(context);
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    this._titleController.addListener(this._updateTitle);
+  }
+
+  @override
+  void dispose() {
+    this._titleController.dispose();
+    this._bloc.dispose();
+    super.dispose();
   }
 
   @override
@@ -38,36 +90,10 @@ class _SessionFormPageState extends State<SessionFormPage> {
         automaticallyImplyLeading: false,
       ),
 
-      body: Form(
-        key: this._formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            TextFormField(
-              decoration: InputDecoration(
-                labelText: "Title",
-              ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return "Please enter some text";
-                }
-              },
-            ),
-            Text(this._dateString),
-            IconButton(
-                icon: Icon(FontAwesomeIcons.calendarAlt),
-                onPressed: this._chooseDate,
-            ),
-            IconButton(
-              icon: Icon(FontAwesomeIcons.check),
-              onPressed: () {
-                if (this._formKey.currentState.validate()) {
-                  this._toHome(context);
-                }
-              },
-            ),
-          ],
-        ),
+      body: BlocBuilder(
+        bloc: this._bloc,
+        builder: (BuildContext context, SessionFormState state) =>
+          this._buildForm(state)
       )
     );
   }
