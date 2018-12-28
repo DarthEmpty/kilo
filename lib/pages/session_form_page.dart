@@ -22,11 +22,11 @@ class _SessionFormPageState extends State<SessionFormPage> {
   void _updateTitle() =>
     this._bloc.dispatch(UpdateTitle(this._titleController.value.toString()));
 
-  Future _chooseDate() async {
+  Future _chooseDate(SessionFormState state) async {
     DateTime now = DateTime.now();
     DateTime newDate = await showDatePicker(
       context: context,
-      initialDate: now,
+      initialDate: state.date,
       firstDate: now.subtract(Duration(days: 365)),
       lastDate: now
     );
@@ -54,7 +54,7 @@ class _SessionFormPageState extends State<SessionFormPage> {
           Text(toDateString(state.date)),
           IconButton(
             icon: Icon(FontAwesomeIcons.calendarAlt),
-            onPressed: this._chooseDate,
+            onPressed: () => this._chooseDate(state),
           ),
           IconButton(
             icon: Icon(FontAwesomeIcons.check),
