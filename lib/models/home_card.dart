@@ -8,7 +8,11 @@ class HomeCard extends Card {
   final DateTime date;
   final String subtitle;
 
-  HomeCard({this.title, this.date, this.subtitle}): super(
+  HomeCard({
+    @required this.title,
+    @required this.date,
+    @required this.subtitle
+  }): super(
     child: Row(
       children: <Widget>[
         Expanded(

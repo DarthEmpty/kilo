@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kilo/blocs/session_form_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kilo/utils.dart';
+import 'package:kilo/models/activity_row.dart';
 
 
 class SessionFormPage extends StatefulWidget {
@@ -42,6 +43,7 @@ class _SessionFormPageState extends State<SessionFormPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+
           TextFormField(
             decoration: InputDecoration(labelText: "Title",),
             controller: this._titleController,
@@ -51,11 +53,38 @@ class _SessionFormPageState extends State<SessionFormPage> {
               }
             },
           ),
+
           Text(toDateString(state.date)),
           IconButton(
             icon: Icon(FontAwesomeIcons.calendarAlt),
             onPressed: () => this._chooseDate(state),
           ),
+
+          Table(
+            children: <TableRow>[
+              ActivityRow(
+                activity: "Farmer's Walk",
+                reps: 5,
+                weight: 30,
+                unit: MassUnit.KG,
+              ),
+
+              ActivityRow(
+                activity: "Squats",
+                reps: 8,
+                weight: 10.2,
+                unit: MassUnit.LB,
+              ),
+
+              ActivityRow(
+                activity: "Deadlifts",
+                reps: 8,
+                weight: 30,
+                unit: MassUnit.KG,
+              ),
+            ]
+          ),
+
           IconButton(
             icon: Icon(FontAwesomeIcons.check),
             onPressed: () {
@@ -64,6 +93,8 @@ class _SessionFormPageState extends State<SessionFormPage> {
               }
             },
           ),
+
+
         ],
       ),
     );
