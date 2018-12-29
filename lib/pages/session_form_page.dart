@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kilo/blocs/session_form_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kilo/utils.dart';
-import 'package:kilo/models/activity_row.dart';
+import 'package:kilo/models/set_row.dart';
 
 
 class SessionFormPage extends StatefulWidget {
@@ -17,6 +17,9 @@ class _SessionFormPageState extends State<SessionFormPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final SessionFormBloc _bloc = SessionFormBloc();
   final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _setNameController = TextEditingController();
+  final TextEditingController _repsController = TextEditingController(text: "0");
+  final TextEditingController _weightController = TextEditingController(text: "0.0");
 
   void _toHome(BuildContext context) => Navigator.pop(context);
 
@@ -54,30 +57,55 @@ class _SessionFormPageState extends State<SessionFormPage> {
             },
           ),
 
-          Text(toDateString(state.date)),
-          IconButton(
-            icon: Icon(FontAwesomeIcons.calendarAlt),
-            onPressed: () => this._chooseDate(state),
+          Row(
+            children: <Widget>[
+              Text(toDateString(state.date)),
+              IconButton(
+                icon: Icon(FontAwesomeIcons.calendarAlt),
+                onPressed: () => this._chooseDate(state),
+              ),
+            ],
+          ),
+
+          Row(
+            children: <Widget>[
+              Expanded(child: TextFormField(
+                decoration: InputDecoration(labelText: "Set Name"),
+                controller: this._setNameController,
+              )),
+              Expanded(child: TextFormField(
+                decoration: InputDecoration(labelText: "Reps"),
+                keyboardType: TextInputType.number,
+                controller: this._repsController,
+              )),
+              Expanded(child: TextFormField(
+                decoration: InputDecoration(labelText: "Weight"),
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                controller: this._weightController,
+              )),
+              RaisedButton(
+                child: Text(""), // TODO: Cycle through Mass Units on press
+                onPressed: () {},
+              )
+            ],
           ),
 
           Table(
             children: <TableRow>[
-              ActivityRow(
-                activity: "Farmer's Walk",
+              SetRow(
+                setName: "Farmer's Walk",
                 reps: 5,
                 weight: 30,
                 unit: MassUnit.KG,
               ),
-
-              ActivityRow(
-                activity: "Squats",
+              SetRow(
+                setName: "Squats",
                 reps: 8,
                 weight: 10.2,
                 unit: MassUnit.LB,
               ),
-
-              ActivityRow(
-                activity: "Deadlifts",
+              SetRow(
+                setName: "Deadlifts",
                 reps: 8,
                 weight: 30,
                 unit: MassUnit.KG,
@@ -93,8 +121,6 @@ class _SessionFormPageState extends State<SessionFormPage> {
               }
             },
           ),
-
-
         ],
       ),
     );
@@ -109,6 +135,7 @@ class _SessionFormPageState extends State<SessionFormPage> {
   @override
   void dispose() {
     this._titleController.dispose();
+    this._setNameController.dispose();
     this._bloc.dispose();
     super.dispose();
   }

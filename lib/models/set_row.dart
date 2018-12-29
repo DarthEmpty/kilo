@@ -4,20 +4,20 @@ import 'package:kilo/utils.dart';
 
 
 
-class ActivityRow extends TableRow {
-  final String activity;
+class SetRow extends TableRow {
+  final String setName;
   final int reps;
   final double weight;
   final MassUnit unit;
 
-  ActivityRow({
-    @required this.activity,
+  SetRow({
+    @required this.setName,
     @required this.reps,
     @required this.weight,
     @required this.unit
   }): super(
     children: <Widget>[
-      Text(activity),
+      Text(setName),
       Text(reps.toString()),
       Text(weight.toString() + toMassUnitString(unit)),
       IconButton(
