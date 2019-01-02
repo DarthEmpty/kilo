@@ -83,10 +83,21 @@ class _SessionFormPageState extends State<SessionFormPage> {
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 controller: this._weightController,
               )),
-              RaisedButton(
-                child: Text(""), // TODO: Cycle through Mass Units on press
+              DropdownButton<MassUnit>(
+                items: MassUnit.values.map(
+                  (value) => DropdownMenuItem<MassUnit>(
+                    value: value,
+                    child: Text(toMassUnitString(value)),
+                  )
+                ).toList(),
+                value: state.unit,
+                onChanged: (MassUnit value) =>
+                    this._bloc.dispatch(UpdateUnit(value)),
+              ),
+              IconButton(
+                icon: Icon(FontAwesomeIcons.plus),
                 onPressed: () {},
-              )
+              ),
             ],
           ),
 
