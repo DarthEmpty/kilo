@@ -5,25 +5,43 @@ import 'package:kilo/utils.dart';
 
 
 class SetRow extends TableRow {
-  final String setName;
+  final String name;
   final int reps;
   final double weight;
   final MassUnit unit;
 
   SetRow({
-    @required this.setName,
+    @required this.name,
     @required this.reps,
     @required this.weight,
     @required this.unit
   }): super(
     children: <Widget>[
-      Text(setName),
+      Text(name),
       Text(reps.toString()),
-      Text(weight.toString() + toMassUnitString(unit)),
+      Text(weight.toString() + unit.toString()),
       IconButton(
         icon: Icon(FontAwesomeIcons.times),
         onPressed: null
       )
     ]
   );
+
+  factory SetRow.fromJson(Map<String, dynamic> json) {
+    return SetRow(
+      name: json["name"],
+      reps: json["reps"],
+      weight: json["weight"],
+      unit: MassUnit(json["unit"]),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "name": this.name,
+      "reps": this.reps,
+      "weight": this.weight,
+      "unit": this.unit.toString(),
+    };
+  }
 }
