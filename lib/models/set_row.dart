@@ -18,7 +18,7 @@ class SetRow extends TableRow {
     children: <Widget>[
       Text(name),
       Text(reps.toString()),
-      Text(weight.toString() + unit.toString()),
+      Text(weight.toString() + toMassUnitString(unit)),
       IconButton(
         icon: Icon(FontAwesomeIcons.times),
         onPressed: null
