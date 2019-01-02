@@ -93,19 +93,19 @@ class _SessionFormPageState extends State<SessionFormPage> {
           Table(
             children: <TableRow>[
               SetRow(
-                setName: "Farmer's Walk",
+                name: "Farmer's Walk",
                 reps: 5,
                 weight: 30,
                 unit: MassUnit.KG,
               ),
               SetRow(
-                setName: "Squats",
+                name: "Squats",
                 reps: 8,
                 weight: 10.2,
                 unit: MassUnit.LB,
               ),
               SetRow(
-                setName: "Deadlifts",
+                name: "Deadlifts",
                 reps: 8,
                 weight: 30,
                 unit: MassUnit.KG,

@@ -3,7 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kilo/utils.dart';
 
 
-
 class SetRow extends TableRow {
   final String name;
   final int reps;
@@ -32,7 +31,7 @@ class SetRow extends TableRow {
       name: json["name"],
       reps: json["reps"],
       weight: json["weight"],
-      unit: MassUnit(json["unit"]),
+      unit: toMassUnit(json["unit"]),
     );
   }
 
@@ -41,7 +40,7 @@ class SetRow extends TableRow {
       "name": this.name,
       "reps": this.reps,
       "weight": this.weight,
-      "unit": this.unit.toString(),
+      "unit": toMassUnitString(this.unit),
     };
   }
 }
