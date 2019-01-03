@@ -18,13 +18,27 @@ class _SessionFormPageState extends State<SessionFormPage> {
   final SessionFormBloc _bloc = SessionFormBloc();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _setNameController = TextEditingController();
-  final TextEditingController _repsController = TextEditingController(text: "0");
-  final TextEditingController _weightController = TextEditingController(text: "0.0");
+  final TextEditingController _repsController = TextEditingController();
+  final TextEditingController _weightController = TextEditingController();
+  MassUnit _unit;
 
   void _toHome(BuildContext context) => Navigator.pop(context);
 
   void _updateTitle() =>
-    this._bloc.dispatch(UpdateTitle(this._titleController.value.toString()));
+    this._bloc.dispatch(UpdateTitle(this._titleController.text));
+
+  void _updateNewSetRow() =>
+    this._bloc.dispatch(UpdateNewSetRow(SetRow(
+      name: this._setNameController.text,
+      reps: int.parse(this._repsController.text),
+      weight: double.parse(this._weightController.text),
+      unit: this._unit,
+    )));
+
+  void _updateUnit(MassUnit unit) {
+    this._unit = unit;
+    this._updateNewSetRow();
+  }
 
   Future _chooseDate(SessionFormState state) async {
     DateTime now = DateTime.now();
@@ -90,9 +104,8 @@ class _SessionFormPageState extends State<SessionFormPage> {
                     child: Text(toMassUnitString(value)),
                   )
                 ).toList(),
-                value: state.unit,
-                onChanged: (MassUnit value) =>
-                    this._bloc.dispatch(UpdateUnit(value)),
+                value: state.newSetRow.unit,
+                onChanged: (MassUnit value) => this._updateUnit(value),
               ),
               IconButton(
                 icon: Icon(FontAwesomeIcons.plus),
@@ -141,12 +154,18 @@ class _SessionFormPageState extends State<SessionFormPage> {
   void initState() {
     super.initState();
     this._titleController.addListener(this._updateTitle);
+    this._setNameController.addListener(this._updateNewSetRow);
+    this._repsController.addListener(this._updateNewSetRow);
+    this._weightController.addListener(this._updateNewSetRow);
+    this._unit = this._bloc.currentState.newSetRow.unit;
   }
 
   @override
   void dispose() {
     this._titleController.dispose();
     this._setNameController.dispose();
+    this._repsController.dispose();
+    this._weightController.dispose();
     this._bloc.dispose();
     super.dispose();
   }

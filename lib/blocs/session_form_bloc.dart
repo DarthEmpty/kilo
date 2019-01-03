@@ -1,23 +1,24 @@
 import 'package:bloc/bloc.dart';
 import 'package:kilo/utils.dart';
 import 'package:meta/meta.dart';
+import 'package:kilo/models/set_row.dart';
 
 
 class SessionFormState {
   final String title;
   final DateTime date;
-  final MassUnit unit;
+  final SetRow newSetRow;
 
   SessionFormState({
     @required this.title,
     @required this.date,
-    @required this.unit,
+    @required this.newSetRow,
   });
 
   factory SessionFormState.initial() => SessionFormState(
     title: "",
     date: DateTime.now(),
-    unit: null,
+    newSetRow: SetRow(name: "", reps: 0, weight: 0.0, unit: MassUnit.KG),
   );
 }
 
@@ -34,9 +35,9 @@ class UpdateDate extends SessionFormEvent {
   UpdateDate(this.newValue);
 }
 
-class UpdateUnit extends SessionFormEvent {
-  final MassUnit newValue;
-  UpdateUnit(this.newValue);
+class UpdateNewSetRow extends SessionFormEvent {
+  final SetRow newValue;
+  UpdateNewSetRow(this.newValue);
 }
 // endregion
 
@@ -50,21 +51,21 @@ class SessionFormBloc extends Bloc<SessionFormEvent, SessionFormState> {
       yield SessionFormState(
         title: event.newValue,
         date: currentState.date,
-        unit: currentState.unit,
+        newSetRow: currentState.newSetRow,
       );
 
     } else if (event is UpdateDate) {
       yield SessionFormState(
         title: currentState.title,
         date: event.newValue,
-        unit: currentState.unit,
+        newSetRow: currentState.newSetRow,
       );
 
-    } else if (event is UpdateUnit) {
+    } else if (event is UpdateNewSetRow) {
       yield SessionFormState(
         title: currentState.title,
         date: currentState.date,
-        unit: event.newValue,
+        newSetRow: event.newValue,
       );
     }
   }
