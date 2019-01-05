@@ -34,6 +34,10 @@ class _SessionFormPageState extends State<SessionFormPage> {
       unit: unit ?? this._bloc.currentState.newSetRow.unit,
     )));
 
+  void _addRow() => this._bloc.dispatch(AddToTable());
+
+  void _removeRow(int index) => this._bloc.dispatch(RemoveFromTable(index));
+
   Future _chooseDate(SessionFormState state) async {
     DateTime now = DateTime.now();
     DateTime newDate = await showDatePicker(
@@ -103,33 +107,12 @@ class _SessionFormPageState extends State<SessionFormPage> {
               ),
               IconButton(
                 icon: Icon(FontAwesomeIcons.plus),
-                onPressed: () {},
+                onPressed: this._addRow,
               ),
             ],
           ),
 
-          Table(
-            children: <TableRow>[
-              SetRow(
-                name: "Farmer's Walk",
-                reps: 5,
-                weight: 30,
-                unit: MassUnit.KG,
-              ),
-              SetRow(
-                name: "Squats",
-                reps: 8,
-                weight: 10.2,
-                unit: MassUnit.LB,
-              ),
-              SetRow(
-                name: "Deadlifts",
-                reps: 8,
-                weight: 30,
-                unit: MassUnit.KG,
-              ),
-            ]
-          ),
+          Table(children: state.tableRows),
 
           IconButton(
             icon: Icon(FontAwesomeIcons.check),

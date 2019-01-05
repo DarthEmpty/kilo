@@ -8,29 +8,34 @@ class SessionFormState {
   final String title;
   final DateTime date;
   final SetRow newSetRow;
+  final List<SetRow> tableRows;
 
   SessionFormState({
     @required this.title,
     @required this.date,
     @required this.newSetRow,
+    @required this.tableRows,
   });
 
   factory SessionFormState.initial() => SessionFormState(
     title: "",
     date: DateTime.now(),
     newSetRow: SetRow(name: "", reps: 0, weight: 0.0, unit: MassUnit.KG),
+    tableRows: []
   );
 
   factory SessionFormState.fromMap(Map<String, dynamic> map) => SessionFormState(
       title: map["title"],
       date: map["date"],
       newSetRow: map["newSetRow"],
+      tableRows: map["tableRows"],
   );
 
   Map<String, dynamic> toMap() => {
     "title": this.title,
     "date": this.date,
     "newSetRow": this.newSetRow,
+    "tableRows": this.tableRows,
   };
 }
 
@@ -51,6 +56,13 @@ class UpdateNewSetRow extends SessionFormEvent {
   final SetRow newValue;
   UpdateNewSetRow(this.newValue);
 }
+
+class AddToTable extends SessionFormEvent {}
+
+class RemoveFromTable extends SessionFormEvent {
+  final int index;
+  RemoveFromTable(this.index);
+}
 // endregion
 
 class SessionFormBloc extends Bloc<SessionFormEvent, SessionFormState> {
@@ -63,24 +75,18 @@ class SessionFormBloc extends Bloc<SessionFormEvent, SessionFormState> {
 
     if (event is UpdateTitle) {
       attr["title"] = event.newValue;
-        title: event.newValue,
-        date: currentState.date,
-        newSetRow: currentState.newSetRow,
-      );
 
     } else if (event is UpdateDate) {
       attr["date"] = event.newValue;
-        title: currentState.title,
-        date: event.newValue,
-        newSetRow: currentState.newSetRow,
-      );
 
     } else if (event is UpdateNewSetRow) {
       attr["newSetRow"] = event.newValue;
-        title: currentState.title,
-        date: currentState.date,
-        newSetRow: event.newValue,
-      );
+
+    } else if (event is AddToTable) {
+      (attr["tableRows"] as List).add(currentState.newSetRow);
+
+    } else if (event is RemoveFromTable) {
+      (attr["tableRows"] as List).removeAt(event.index);
     }
 
     yield SessionFormState.fromMap(attr);
