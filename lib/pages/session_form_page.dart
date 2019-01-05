@@ -20,25 +20,19 @@ class _SessionFormPageState extends State<SessionFormPage> {
   final TextEditingController _setNameController = TextEditingController();
   final TextEditingController _repsController = TextEditingController();
   final TextEditingController _weightController = TextEditingController();
-  MassUnit _unit;
 
   void _toHome(BuildContext context) => Navigator.pop(context);
 
   void _updateTitle() =>
     this._bloc.dispatch(UpdateTitle(this._titleController.text));
 
-  void _updateNewSetRow() =>
+  void _updateNewSetRow({MassUnit unit}) =>
     this._bloc.dispatch(UpdateNewSetRow(SetRow(
       name: this._setNameController.text,
       reps: int.parse(this._repsController.text),
       weight: double.parse(this._weightController.text),
-      unit: this._unit,
+      unit: unit ?? this._bloc.currentState.newSetRow.unit,
     )));
-
-  void _updateUnit(MassUnit unit) {
-    this._unit = unit;
-    this._updateNewSetRow();
-  }
 
   Future _chooseDate(SessionFormState state) async {
     DateTime now = DateTime.now();
@@ -105,7 +99,7 @@ class _SessionFormPageState extends State<SessionFormPage> {
                   )
                 ).toList(),
                 value: state.newSetRow.unit,
-                onChanged: (MassUnit value) => this._updateUnit(value),
+                onChanged: (MassUnit value) => this._updateNewSetRow(unit: value),
               ),
               IconButton(
                 icon: Icon(FontAwesomeIcons.plus),
@@ -157,7 +151,6 @@ class _SessionFormPageState extends State<SessionFormPage> {
     this._setNameController.addListener(this._updateNewSetRow);
     this._repsController.addListener(this._updateNewSetRow);
     this._weightController.addListener(this._updateNewSetRow);
-    this._unit = this._bloc.currentState.newSetRow.unit;
   }
 
   @override
