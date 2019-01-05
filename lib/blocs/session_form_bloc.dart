@@ -20,6 +20,18 @@ class SessionFormState {
     date: DateTime.now(),
     newSetRow: SetRow(name: "", reps: 0, weight: 0.0, unit: MassUnit.KG),
   );
+
+  factory SessionFormState.fromMap(Map<String, dynamic> map) => SessionFormState(
+      title: map["title"],
+      date: map["date"],
+      newSetRow: map["newSetRow"],
+  );
+
+  Map<String, dynamic> toMap() => {
+    "title": this.title,
+    "date": this.date,
+    "newSetRow": this.newSetRow,
+  };
 }
 
 // region Events
@@ -47,26 +59,30 @@ class SessionFormBloc extends Bloc<SessionFormEvent, SessionFormState> {
 
   @override
   Stream<SessionFormState> mapEventToState(SessionFormState currentState, SessionFormEvent event) async* {
+    Map<String, dynamic> attr = currentState.toMap();
+
     if (event is UpdateTitle) {
-      yield SessionFormState(
+      attr["title"] = event.newValue;
         title: event.newValue,
         date: currentState.date,
         newSetRow: currentState.newSetRow,
       );
 
     } else if (event is UpdateDate) {
-      yield SessionFormState(
+      attr["date"] = event.newValue;
         title: currentState.title,
         date: event.newValue,
         newSetRow: currentState.newSetRow,
       );
 
     } else if (event is UpdateNewSetRow) {
-      yield SessionFormState(
+      attr["newSetRow"] = event.newValue;
         title: currentState.title,
         date: currentState.date,
         newSetRow: event.newValue,
       );
     }
+
+    yield SessionFormState.fromMap(attr);
   }
 }
