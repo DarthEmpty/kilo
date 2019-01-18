@@ -26,17 +26,18 @@ class _SessionFormPageState extends State<SessionFormPage> {
   void _updateTitle() =>
     this._bloc.dispatch(UpdateTitle(this._titleController.text));
 
+  void _addRow() => this._bloc.dispatch(AddToTable());
+
+  void _removeRow(SetRow row) => this._bloc.dispatch(RemoveFromTable(row));
+
   void _updateNewSetRow({MassUnit unit}) =>
     this._bloc.dispatch(UpdateNewSetRow(SetRow(
       name: this._setNameController.text,
       reps: int.parse(this._repsController.text),
       weight: double.parse(this._weightController.text),
       unit: unit ?? this._bloc.currentState.newSetRow.unit,
+      onDelete: (SetRow row) => this._removeRow(row),
     )));
-
-  void _addRow() => this._bloc.dispatch(AddToTable());
-
-  void _removeRow(int index) => this._bloc.dispatch(RemoveFromTable(index));
 
   Future _chooseDate(SessionFormState state) async {
     DateTime now = DateTime.now();
@@ -112,7 +113,7 @@ class _SessionFormPageState extends State<SessionFormPage> {
             ],
           ),
 
-          Table(children: state.tableRows),
+          Table(children: state.tableRows.map((row) => row.widget).toList()),
 
           IconButton(
             icon: Icon(FontAwesomeIcons.check),
