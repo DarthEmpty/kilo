@@ -114,15 +114,6 @@ class _SessionFormPageState extends State<SessionFormPage> {
           ),
 
           Table(children: state.tableRows.map((row) => row.widget).toList()),
-
-          IconButton(
-            icon: Icon(FontAwesomeIcons.check),
-            onPressed: () {
-              if (this._formKey.currentState.validate()) {
-                this._toHome(context);
-              }
-            },
-          ),
         ],
       ),
     );
@@ -159,7 +150,23 @@ class _SessionFormPageState extends State<SessionFormPage> {
         bloc: this._bloc,
         builder: (BuildContext context, SessionFormState state) =>
           SingleChildScrollView(child: this._buildForm(state),)
-      )
+      ),
+
+      persistentFooterButtons: <Widget>[
+        IconButton(
+          icon: Icon(FontAwesomeIcons.check),
+          onPressed: () {
+            if (this._formKey.currentState.validate()) {
+              this._toHome(context);
+            }
+          },
+        ),
+        IconButton(
+          icon: Icon(FontAwesomeIcons.times),
+          onPressed: () => this._toHome(context)
+        ),
+      ],
     );
+
   }
 }
