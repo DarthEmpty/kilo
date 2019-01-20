@@ -158,7 +158,7 @@ class _SessionFormPageState extends State<SessionFormPage> {
       body: BlocBuilder(
         bloc: this._bloc,
         builder: (BuildContext context, SessionFormState state) =>
-          this._buildForm(state)
+          SingleChildScrollView(child: this._buildForm(state),)
       )
     );
   }
