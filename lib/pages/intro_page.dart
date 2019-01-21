@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:kilo/pages/home.dart';
+import 'package:kilo/pages/home_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 
-class Intro extends StatelessWidget {
-  void _toHome(BuildContext context) {
+class IntroPage extends StatelessWidget {
+  void _toHomePage(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Home(title: "Kilo",))
+      MaterialPageRoute(builder: (context) => HomePage())
     );
   }
 
@@ -24,7 +24,7 @@ class Intro extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => this._toHome(context),
+        onPressed: () => this._toHomePage(context),
         tooltip: "Go Home",
         child: Icon(FontAwesomeIcons.home),
       ),

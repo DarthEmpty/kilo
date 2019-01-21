@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:date_format/date_format.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kilo/utils.dart';
 
 
 class HomeCard extends Card {
@@ -8,18 +8,18 @@ class HomeCard extends Card {
   final DateTime date;
   final String subtitle;
 
-  static String _toDateString(DateTime datetime) {
-    return formatDate(datetime, [dd, "/", mm, "/", yy]);
-  }
-
-  HomeCard({this.title, this.date, this.subtitle}): super(
+  HomeCard({
+    @required this.title,
+    @required this.date,
+    @required this.subtitle
+  }): super(
     child: Row(
       children: <Widget>[
         Expanded(
           child: ListTile(
             leading: Icon(FontAwesomeIcons.dumbbell),
             title: Text(title),
-            subtitle: Text(HomeCard._toDateString(date) + " " + subtitle),
+            subtitle: Text("${toDateString(date)} $subtitle"),
           )
         ),
         IconButton(
