@@ -4,6 +4,7 @@ import 'package:kilo/blocs/session_form_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kilo/utils.dart';
 import 'package:kilo/models/set_row.dart';
+import 'package:validators/validators.dart';
 
 
 class SessionFormPage extends StatefulWidget {
@@ -18,8 +19,8 @@ class _SessionFormPageState extends State<SessionFormPage> {
   final SessionFormBloc _bloc = SessionFormBloc();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _setNameController = TextEditingController();
-  final TextEditingController _repsController = TextEditingController();
-  final TextEditingController _weightController = TextEditingController();
+  final TextEditingController _repsController = TextEditingController(text: "0");
+  final TextEditingController _weightController = TextEditingController(text: "0");
 
   void _toHome(BuildContext context) => Navigator.pop(context);
 
@@ -30,14 +31,29 @@ class _SessionFormPageState extends State<SessionFormPage> {
 
   void _removeRow(SetRow row) => this._bloc.dispatch(RemoveFromTable(row));
 
-  void _updateNewSetRow({MassUnit unit}) =>
+  bool _setNameIsValid() => this._setNameController.text.isNotEmpty;
+
+  bool _repsIsValid() => isInt(this._repsController.text);
+
+  bool _weightIsValid() =>
+    this._weightController.text.isNotEmpty  // Needed to prevent FormatExceptions
+      && isFloat(this._weightController.text);
+
+  void _updateNewSetRow({MassUnit unit}) {
     this._bloc.dispatch(UpdateNewSetRow(SetRow(
       name: this._setNameController.text,
-      reps: int.parse(this._repsController.text),
-      weight: double.parse(this._weightController.text),
+      reps: this._repsIsValid() ? int.parse(this._repsController.text) : 0,
+      weight: this._weightIsValid() ? double.parse(this._weightController.text) : 0.0,
       unit: unit ?? this._bloc.currentState.newSetRow.unit,
       onDelete: (SetRow row) => this._removeRow(row),
     )));
+
+    this._bloc.dispatch(CheckIfAddButtonEnabled(
+      this._setNameIsValid()
+        && this._repsIsValid()
+        && this._weightIsValid()
+    ));
+  }
 
   Future _chooseDate(SessionFormState state) async {
     DateTime now = DateTime.now();
@@ -108,7 +124,7 @@ class _SessionFormPageState extends State<SessionFormPage> {
               ),
               IconButton(
                 icon: Icon(FontAwesomeIcons.plus),
-                onPressed: this._addRow,
+                onPressed: state.addButtonEnabled ? this._addRow : null
               ),
             ],
           ),
