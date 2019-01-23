@@ -6,12 +6,10 @@ import 'package:kilo/utils.dart';
 class HomeCard extends Card {
   final String title;
   final DateTime date;
-  final String subtitle;
 
   HomeCard({
     @required this.title,
     @required this.date,
-    @required this.subtitle
   }): super(
     child: Row(
       children: <Widget>[
@@ -19,7 +17,7 @@ class HomeCard extends Card {
           child: ListTile(
             leading: Icon(FontAwesomeIcons.dumbbell),
             title: Text(title),
-            subtitle: Text("${toDateString(date)} $subtitle"),
+            subtitle: Text(toDateString(date)),
           )
         ),
         IconButton(
@@ -34,13 +32,11 @@ class HomeCard extends Card {
     return HomeCard(
       title: json["title"] as String,
       date: DateTime.fromMillisecondsSinceEpoch(json["date"]),
-      subtitle: json["subtitle"] as String,
     );
   }
 
   Map<String, dynamic> toJson() => {
     "title": this.title,
     "date": this.date.millisecondsSinceEpoch,
-    "subtitle": this.subtitle
   };
 }
