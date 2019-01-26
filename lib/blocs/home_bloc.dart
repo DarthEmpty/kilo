@@ -30,7 +30,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState>{
     if (event is Populate) {
       HTTPClient client = HTTPClient("35.178.208.241:80");
       Map<String, dynamic> json = await client.get(
-          "card_details",
+          "sessions",
           event.username,
           event.password
       );

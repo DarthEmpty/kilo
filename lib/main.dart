@@ -1,7 +1,18 @@
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:kilo/pages/intro_page.dart';
 
-void main() => runApp(Kilo());
+void main() {
+  BlocSupervisor().delegate = Delegate();
+  runApp(Kilo());
+}
+
+class Delegate implements BlocDelegate {
+  @override
+  void onTransition(Transition transition) {
+    print(transition);
+  }
+}
 
 class Kilo extends StatelessWidget {
   // This widget is the root of your application.
