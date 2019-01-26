@@ -69,71 +69,69 @@ class _SessionFormPageState extends State<SessionFormPage> {
     }
   }
 
-  Form _buildForm(SessionFormState state) {
-    return Form(
-      key: this._formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
+  Form _buildForm(SessionFormState state) => Form(
+    key: this._formKey,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
 
-          TextFormField(
-            decoration: InputDecoration(labelText: "Title",),
-            controller: this._titleController,
-            validator: (value) {
-              if (value.isEmpty) {
-                return "Please enter some text";
-              }
-            },
-          ),
+        TextFormField(
+          decoration: InputDecoration(labelText: "Title",),
+          controller: this._titleController,
+          validator: (value) {
+            if (value.isEmpty) {
+              return "Please enter some text";
+            }
+          },
+        ),
 
-          Row(
-            children: <Widget>[
-              Text(toDateString(state.date)),
-              IconButton(
-                icon: Icon(FontAwesomeIcons.calendarAlt),
-                onPressed: () => this._chooseDate(state),
-              ),
-            ],
-          ),
+        Row(
+          children: <Widget>[
+            Text(toDateString(state.date)),
+            IconButton(
+              icon: Icon(FontAwesomeIcons.calendarAlt),
+              onPressed: () => this._chooseDate(state),
+            ),
+          ],
+        ),
 
-          Row(
-            children: <Widget>[
-              Expanded(child: TextFormField(
-                decoration: InputDecoration(labelText: "Set Name"),
-                controller: this._setNameController,
-              )),
-              Expanded(child: TextFormField(
-                decoration: InputDecoration(labelText: "Reps"),
-                keyboardType: TextInputType.number,
-                controller: this._repsController,
-              )),
-              Expanded(child: TextFormField(
-                decoration: InputDecoration(labelText: "Weight"),
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
-                controller: this._weightController,
-              )),
-              DropdownButton<MassUnit>(
-                items: MassUnit.values.map(
-                  (value) => DropdownMenuItem<MassUnit>(
-                    value: value,
-                    child: Text(toMassUnitString(value)),
-                  )
-                ).toList(),
-                value: state.newSetRow.unit,
-                onChanged: (MassUnit value) => this._updateNewSetRow(unit: value),
-              ),
-              IconButton(
-                icon: Icon(FontAwesomeIcons.plus),
-                onPressed: state.addButtonEnabled ? this._addRow : null
-              ),
-            ],
-          ),
+        Row(
+          children: <Widget>[
+            Expanded(child: TextFormField(
+              decoration: InputDecoration(labelText: "Set Name"),
+              controller: this._setNameController,
+            )),
+            Expanded(child: TextFormField(
+              decoration: InputDecoration(labelText: "Reps"),
+              keyboardType: TextInputType.number,
+              controller: this._repsController,
+            )),
+            Expanded(child: TextFormField(
+              decoration: InputDecoration(labelText: "Weight"),
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              controller: this._weightController,
+            )),
+            DropdownButton<MassUnit>(
+              items: MassUnit.values.map(
+                (value) => DropdownMenuItem<MassUnit>(
+                  value: value,
+                  child: Text(toMassUnitString(value)),
+                )
+              ).toList(),
+              value: state.newSetRow.unit,
+              onChanged: (MassUnit value) => this._updateNewSetRow(unit: value),
+            ),
+            IconButton(
+              icon: Icon(FontAwesomeIcons.plus),
+              onPressed: state.addButtonEnabled ? this._addRow : null
+            ),
+          ],
+        ),
 
-          Table(children: state.tableRows.map((row) => row.widget).toList()),
-        ],
-      ),
-    );
-  }
+        Table(children: state.tableRows.map((row) => row.widget).toList()),
+      ],
+    ),
+  );
 
   @override
   void initState() {
@@ -155,34 +153,31 @@ class _SessionFormPageState extends State<SessionFormPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(this.widget.title),
-        automaticallyImplyLeading: false,
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(
+      title: Text(this.widget.title),
+      automaticallyImplyLeading: false,
+    ),
+
+    body: BlocBuilder(
+      bloc: this._bloc,
+      builder: (BuildContext context, SessionFormState state) =>
+        SingleChildScrollView(child: this._buildForm(state),)
+    ),
+
+    persistentFooterButtons: <Widget>[
+      IconButton(
+        icon: Icon(FontAwesomeIcons.check),
+        onPressed: () {
+          if (this._formKey.currentState.validate()) {
+            this._toHome(context);
+          }
+        },
       ),
-
-      body: BlocBuilder(
-        bloc: this._bloc,
-        builder: (BuildContext context, SessionFormState state) =>
-          SingleChildScrollView(child: this._buildForm(state),)
+      IconButton(
+        icon: Icon(FontAwesomeIcons.times),
+        onPressed: () => this._toHome(context)
       ),
-
-      persistentFooterButtons: <Widget>[
-        IconButton(
-          icon: Icon(FontAwesomeIcons.check),
-          onPressed: () {
-            if (this._formKey.currentState.validate()) {
-              this._toHome(context);
-            }
-          },
-        ),
-        IconButton(
-          icon: Icon(FontAwesomeIcons.times),
-          onPressed: () => this._toHome(context)
-        ),
-      ],
-    );
-
-  }
+    ],
+  );
 }
