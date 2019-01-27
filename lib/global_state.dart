@@ -19,14 +19,14 @@ class FetchSessions {
 }
 
 class Populate {
-  final Map<String, dynamic> json;
-  Populate(this.json);
+  final List sessions;
+  Populate(this.sessions);
 }
 // endregion
 
 // region Middleware
 void logger(Store<KiloState> store, action, NextDispatcher next) {
-  print("Action!: $action");
+  print("Global State Action: $action");
   next(action);
 }
 
@@ -39,15 +39,15 @@ void dataProvider(Store<KiloState> store, dynamic action, NextDispatcher next) a
         action.password
     );
 
-    next(Populate(json));
+    next(Populate(json["_items"] as List));
   }
 }
 // endregion
 
 KiloState kiloReducer(KiloState currentState, dynamic action) {
   if (action is Populate) {
-    action.json["_items"].sort((a, b) => a["date"].compareTo(b["date"]) as int);
-    return KiloState(sessions: action.json["_items"] as List);
+    action.sessions.sort((a, b) => a["date"].compareTo(b["date"]) as int);
+    return KiloState(sessions: action.sessions);
   }
 
   return currentState;

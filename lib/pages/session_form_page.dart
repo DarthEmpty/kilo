@@ -5,6 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kilo/utils.dart';
 import 'package:kilo/models/set_row.dart';
 import 'package:validators/validators.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:kilo/global_state.dart';
 
 
 class SessionFormPage extends StatefulWidget {
@@ -166,14 +169,26 @@ class _SessionFormPageState extends State<SessionFormPage> {
     ),
 
     persistentFooterButtons: <Widget>[
-      IconButton(
-        icon: Icon(FontAwesomeIcons.check),
-        onPressed: () {
-          if (this._formKey.currentState.validate()) {
-            this._toHome(context);
-          }
-        },
+      BlocBuilder(
+        bloc: this._bloc,
+        builder: (BuildContext context, SessionFormState state) =>
+          StoreConnector<KiloState, Store<KiloState>>(
+            converter: (Store<KiloState> store) => store,
+            builder: (BuildContext context, Store<KiloState> store) => IconButton(
+              icon: Icon(FontAwesomeIcons.check),
+              onPressed: () {
+                // TODO: Trigger business logic in onPressed method as a Bloc Event.
+                if (this._formKey.currentState.validate()) {
+                  List sessions = store.state.sessions;
+                  sessions.add(state.toJson());
+                  store.dispatch(Populate(sessions));
+                  this._toHome(context);
+                }
+              },
+            ),
+          ),
       ),
+
       IconButton(
         icon: Icon(FontAwesomeIcons.times),
         onPressed: () => this._toHome(context)

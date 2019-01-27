@@ -30,7 +30,7 @@ class SessionFormState {
     tableRows: LinkedHashSet()
   );
 
-  factory SessionFormState.fromMap(Map<String, dynamic> map) => SessionFormState(
+  factory SessionFormState.fromMutable(Map<String, dynamic> map) => SessionFormState(
     title: map["title"],
     date: map["date"],
     addButtonEnabled: map["addButtonEnabled"],
@@ -38,12 +38,18 @@ class SessionFormState {
     tableRows: map["tableRows"],
   );
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toMutable() => {
     "title": this.title,
     "date": this.date,
     "addButtonEnabled": this.addButtonEnabled,
     "newSetRow": this.newSetRow,
     "tableRows": this.tableRows,
+  };
+
+  Map<String, dynamic> toJson() => {
+    "title": this.title,
+    "date": this.date.millisecondsSinceEpoch,
+    "sets": this.tableRows.map((SetRow row) => row.toJson()).toList()
   };
 }
 
@@ -85,7 +91,7 @@ class SessionFormBloc extends Bloc<SessionFormEvent, SessionFormState> {
 
   @override
   Stream<SessionFormState> mapEventToState(SessionFormState currentState, SessionFormEvent event) async* {
-    Map<String, dynamic> attr = currentState.toMap();
+    Map<String, dynamic> attr = currentState.toMutable();
 
     if (event is UpdateTitle) {
       attr["title"] = event.newValue;
@@ -106,6 +112,6 @@ class SessionFormBloc extends Bloc<SessionFormEvent, SessionFormState> {
       (attr["tableRows"] as Set).remove(event.row);
     }
 
-    yield SessionFormState.fromMap(attr);
+    yield SessionFormState.fromMutable(attr);
   }
 }

@@ -16,7 +16,7 @@ class Delegate implements BlocDelegate {
 class Kilo extends StatelessWidget {
   final Store<KiloState> store;
 
-  Kilo(this.store);
+  Kilo([this.store]);
 
   Widget build(BuildContext context) => StoreProvider<KiloState>(
     store: this.store,
