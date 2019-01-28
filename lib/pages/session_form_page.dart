@@ -177,11 +177,12 @@ class _SessionFormPageState extends State<SessionFormPage> {
             builder: (BuildContext context, Store<KiloState> store) => IconButton(
               icon: Icon(FontAwesomeIcons.check),
               onPressed: () {
-                // TODO: Trigger business logic in onPressed method as a Bloc Event.
                 if (this._formKey.currentState.validate()) {
+                  Map<String, dynamic> sessionJson = state.toJson();
                   List sessions = store.state.sessions;
-                  sessions.add(state.toJson());
+                  sessions.add(sessionJson);
                   store.dispatch(Populate(sessions));
+                  this._bloc.dispatch(PostSession(sessionJson));
                   this._toHome(context);
                 }
               },

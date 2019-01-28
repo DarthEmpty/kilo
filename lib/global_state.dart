@@ -12,11 +12,7 @@ class KiloState {
 }
 
 // region Actions
-class FetchSessions {
-  final String username;
-  final String password;
-  FetchSessions({@required this.username, @required this.password});
-}
+class FetchSessions {}
 
 class Populate {
   final List sessions;
@@ -33,11 +29,7 @@ void logger(Store<KiloState> store, action, NextDispatcher next) {
 void dataProvider(Store<KiloState> store, dynamic action, NextDispatcher next) async {
   if (action is FetchSessions) {
     final HTTPClient client = HTTPClient("35.178.208.241:80");
-    Map<String, dynamic> json = await client.get(
-        "sessions",
-        action.username,
-        action.password
-    );
+    Map<String, dynamic> json = await client.get("sessions");
 
     next(Populate(json["_items"] as List));
   }

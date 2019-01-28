@@ -44,10 +44,7 @@ class _HomePageState extends State<HomePage> {
     ),
 
     body: StoreConnector<KiloState, List>(
-      onInit: (Store<KiloState> store) => store.dispatch(FetchSessions(
-        username: "test_hash",
-        password: "pass"
-      )),
+      onInit: (Store<KiloState> store) => store.dispatch(FetchSessions()),
       converter: (Store<KiloState> store) => store.state.sessions,
       builder: (BuildContext context, List sessions) => this._buildList(sessions),
     ),

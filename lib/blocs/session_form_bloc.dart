@@ -4,6 +4,8 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:kilo/utils.dart';
 import 'package:kilo/models/set_row.dart';
+import 'package:kilo/models/http_client.dart';
+import 'package:redux/redux.dart';
 
 
 @immutable
@@ -83,6 +85,11 @@ class RemoveFromTable extends SessionFormEvent {
   final SetRow row;
   RemoveFromTable(this.row);
 }
+
+class PostSession extends SessionFormEvent {
+  final Map<String, dynamic> session;
+  PostSession(this.session);
+}
 // endregion
 
 class SessionFormBloc extends Bloc<SessionFormEvent, SessionFormState> {
@@ -110,6 +117,10 @@ class SessionFormBloc extends Bloc<SessionFormEvent, SessionFormState> {
 
     } else if (event is RemoveFromTable) {
       (attr["tableRows"] as Set).remove(event.row);
+
+    } else if (event is PostSession) {
+      HTTPClient client = HTTPClient("35.178.208.241:80");
+      client.post("sessions", event.session);
     }
 
     yield SessionFormState.fromMutable(attr);
