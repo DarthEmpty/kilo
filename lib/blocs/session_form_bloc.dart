@@ -4,6 +4,8 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:kilo/utils.dart';
 import 'package:kilo/models/set_row.dart';
+import 'package:kilo/models/http_client.dart';
+import 'package:redux/redux.dart';
 
 
 @immutable
@@ -30,7 +32,7 @@ class SessionFormState {
     tableRows: LinkedHashSet()
   );
 
-  factory SessionFormState.fromMap(Map<String, dynamic> map) => SessionFormState(
+  factory SessionFormState.fromMutable(Map<String, dynamic> map) => SessionFormState(
     title: map["title"],
     date: map["date"],
     addButtonEnabled: map["addButtonEnabled"],
@@ -38,12 +40,18 @@ class SessionFormState {
     tableRows: map["tableRows"],
   );
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toMutable() => {
     "title": this.title,
     "date": this.date,
     "addButtonEnabled": this.addButtonEnabled,
     "newSetRow": this.newSetRow,
     "tableRows": this.tableRows,
+  };
+
+  Map<String, dynamic> toJson() => {
+    "title": this.title,
+    "date": this.date.millisecondsSinceEpoch,
+    "sets": this.tableRows.map((SetRow row) => row.toJson()).toList()
   };
 }
 
@@ -77,6 +85,11 @@ class RemoveFromTable extends SessionFormEvent {
   final SetRow row;
   RemoveFromTable(this.row);
 }
+
+class PostSession extends SessionFormEvent {
+  final Map<String, dynamic> session;
+  PostSession(this.session);
+}
 // endregion
 
 class SessionFormBloc extends Bloc<SessionFormEvent, SessionFormState> {
@@ -85,7 +98,7 @@ class SessionFormBloc extends Bloc<SessionFormEvent, SessionFormState> {
 
   @override
   Stream<SessionFormState> mapEventToState(SessionFormState currentState, SessionFormEvent event) async* {
-    Map<String, dynamic> attr = currentState.toMap();
+    Map<String, dynamic> attr = currentState.toMutable();
 
     if (event is UpdateTitle) {
       attr["title"] = event.newValue;
@@ -104,8 +117,12 @@ class SessionFormBloc extends Bloc<SessionFormEvent, SessionFormState> {
 
     } else if (event is RemoveFromTable) {
       (attr["tableRows"] as Set).remove(event.row);
+
+    } else if (event is PostSession) {
+      HTTPClient client = HTTPClient("35.178.208.241:80");
+      client.post("sessions", event.session);
     }
 
-    yield SessionFormState.fromMap(attr);
+    yield SessionFormState.fromMutable(attr);
   }
 }

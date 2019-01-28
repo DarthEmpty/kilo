@@ -22,6 +22,8 @@ dependencies:
   bloc: ^0.7.7
   flutter_bloc: ^0.4.11
   validators: ^1.0.0+1
+  redux: ^3.0.0
+  flutter_redux: ^0.5.3
 
 dev_dependencies:
   flutter_test:
