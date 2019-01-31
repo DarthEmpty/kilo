@@ -31,7 +31,7 @@ class SetRow {
     );
   }
 
-  factory SetRow.fromJson(int index, Map<String, dynamic> json, Function onDelete) {
+  factory SetRow.fromJson(Map<String, dynamic> json, Function onDelete) {
     return SetRow(
       name: json["name"],
       reps: json["reps"],
