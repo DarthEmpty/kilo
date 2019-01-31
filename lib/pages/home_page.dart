@@ -17,8 +17,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   void _toSessionForm(BuildContext context) => Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => SessionFormPage())
+    context,
+    MaterialPageRoute(builder: (context) => SessionFormPage())
   );
 
   Widget _buildList(List sessions) => ListView.builder(
@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
         return Center(child: CircularProgressIndicator());
       }
 
-      return HomeCard.fromJson(sessions[i]);
+      return HomeCard.fromJson(sessions[i], context).widget;
     }
   );
 
