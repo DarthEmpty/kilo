@@ -6,7 +6,7 @@ import 'package:kilo/utils.dart';
 
 class HomeCard {
   final Map<String, dynamic> session;
-  BuildContext context;
+  final BuildContext context;
   Card widget;
 
   HomeCard(this.session, this.context) {
@@ -16,14 +16,14 @@ class HomeCard {
           Expanded(
             child: ListTile(
               leading: Icon(FontAwesomeIcons.dumbbell),
-              title: Text(this.session["title"]),
+              title: Text(this.session["title"] as String),
               subtitle: Text(toDateString(
-                DateTime.fromMillisecondsSinceEpoch(this.session["date"])
+                DateTime.fromMillisecondsSinceEpoch(this.session["date"] as int)
               )),
             )
           ),
           IconButton(
-          onPressed: null,
+            onPressed: () => this._toSession(this.context),
             icon: Icon(FontAwesomeIcons.externalLinkAlt),
           ),
         ],

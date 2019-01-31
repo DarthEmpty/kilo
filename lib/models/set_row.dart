@@ -23,32 +23,31 @@ class SetRow {
         Text(this.name),
         Text(this.reps.toString()),
         Text(this.weight.toString() + toMassUnitString(unit)),
-        IconButton(
-          icon: Icon(FontAwesomeIcons.times),
-          onPressed: () => onDelete(this)
-        )
+        this.onDelete != null ?
+          IconButton(
+            icon: Icon(FontAwesomeIcons.times),
+            onPressed: () => onDelete(this)
+          )
+          : Container(width: 0, height: 0)
       ]
     );
   }
 
-  factory SetRow.fromJson(Map<String, dynamic> json, Function onDelete) {
-    return SetRow(
-      name: json["name"],
-      reps: json["reps"],
-      weight: json["weight"],
-      unit: toMassUnit(json["unit"]),
+  factory SetRow.fromJson(Map<String, dynamic> json, Function onDelete) =>
+    SetRow(
+      name: json["name"] as String,
+      reps: json["reps"] as int,
+      weight: json["weight"] as double,
+      unit: toMassUnit(json["unit"] as String),
       onDelete: onDelete,
     );
-  }
 
-  Map<String, dynamic> toJson() {
-    return {
-      "name": this.name,
-      "reps": this.reps,
-      "weight": this.weight,
-      "unit": toMassUnitString(this.unit),
-    };
-  }
+  Map<String, dynamic> toJson() => {
+    "name": this.name,
+    "reps": this.reps,
+    "weight": this.weight,
+    "unit": toMassUnitString(this.unit),
+  };
 
   SetRow copy() => SetRow(
     name: this.name,
