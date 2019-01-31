@@ -174,19 +174,17 @@ class _SessionFormPageState extends State<SessionFormPage> {
         builder: (BuildContext context, SessionFormState state) =>
           StoreConnector<KiloState, Store<KiloState>>(
             converter: (Store<KiloState> store) => store,
-            builder: (BuildContext context, Store<KiloState> store) => IconButton(
-              icon: Icon(FontAwesomeIcons.check),
-              onPressed: () {
-                if (this._formKey.currentState.validate()) {
-                  Map<String, dynamic> sessionJson = state.toJson();
-                  List sessions = store.state.sessions;
-                  sessions.add(sessionJson);
-                  store.dispatch(Populate(sessions));
-                  this._bloc.dispatch(PostSession(sessionJson));
-                  this._toHome(context);
-                }
-              },
-            ),
+            builder: (BuildContext context, Store<KiloState> store) =>
+              IconButton(
+                icon: Icon(FontAwesomeIcons.check),
+                onPressed: () {
+                  if (this._formKey.currentState.validate()) {
+                    store.dispatch(AddToSessions(state.toJson()));
+                    this._bloc.dispatch(PostSession(state.toJson()));
+                    this._toHome(context);
+                  }
+                },
+              ),
           ),
       ),
 

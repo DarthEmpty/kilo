@@ -18,6 +18,11 @@ class Populate {
   final List sessions;
   Populate(this.sessions);
 }
+
+class AddToSessions {
+  final Map<String, dynamic> session;
+  AddToSessions(this.session);
+}
 // endregion
 
 // region Middleware
@@ -32,6 +37,9 @@ void dataProvider(Store<KiloState> store, dynamic action, NextDispatcher next) a
     Map<String, dynamic> json = await client.get("sessions");
 
     next(Populate(json["_items"] as List));
+
+  } else {
+    next(action);
   }
 }
 // endregion
@@ -40,6 +48,12 @@ KiloState kiloReducer(KiloState currentState, dynamic action) {
   if (action is Populate) {
     action.sessions.sort((a, b) => a["date"].compareTo(b["date"]) as int);
     return KiloState(sessions: action.sessions);
+
+  } else if (action is AddToSessions) {
+    List sessions = currentState.sessions;
+    sessions.add(action.session);
+    sessions.sort((a, b) => a["date"].compareTo(b["date"]) as int);
+    return KiloState(sessions: sessions);
   }
 
   return currentState;

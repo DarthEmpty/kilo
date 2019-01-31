@@ -1,42 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kilo/pages/session_page.dart';
 import 'package:kilo/utils.dart';
 
 
-class HomeCard extends Card {
-  final String title;
-  final DateTime date;
+class HomeCard {
+  final Map<String, dynamic> session;
+  final BuildContext context;
+  Card widget;
 
-  HomeCard({
-    @required this.title,
-    @required this.date,
-  }): super(
-    child: Row(
-      children: <Widget>[
-        Expanded(
-          child: ListTile(
-            leading: Icon(FontAwesomeIcons.dumbbell),
-            title: Text(title),
-            subtitle: Text(toDateString(date)),
-          )
-        ),
-        IconButton(
-          onPressed: null,
-          icon: Icon(FontAwesomeIcons.externalLinkAlt),
-        ),
-      ],
-    )
-  );
-
-  factory HomeCard.fromJson(Map<String, dynamic> json) {
-    return HomeCard(
-      title: json["title"] as String,
-      date: DateTime.fromMillisecondsSinceEpoch(json["date"]),
+  HomeCard(this.session, this.context) {
+    this.widget = Card(
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: ListTile(
+              leading: Icon(FontAwesomeIcons.dumbbell),
+              title: Text(this.session["title"] as String),
+              subtitle: Text(toDateString(
+                DateTime.fromMillisecondsSinceEpoch(this.session["date"] as int)
+              )),
+            )
+          ),
+          IconButton(
+            onPressed: () => this._toSession(this.context),
+            icon: Icon(FontAwesomeIcons.externalLinkAlt),
+          ),
+        ],
+      )
     );
   }
 
-  Map<String, dynamic> toJson() => {
-    "title": this.title,
-    "date": this.date.millisecondsSinceEpoch,
-  };
+  factory HomeCard.fromJson(Map<String, dynamic> json, BuildContext context) =>
+    HomeCard(json, context);
+
+  void _toSession(BuildContext context) => Navigator.push(
+    this.context,
+    MaterialPageRoute(builder: (context) => SessionPage(session: this.session))
+  );
 }
