@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:kilo/utils.dart';
 import 'package:kilo/models/set_row.dart';
 import 'package:kilo/models/http_client.dart';
-import 'package:redux/redux.dart';
 
 
 @immutable
