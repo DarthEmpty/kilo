@@ -118,7 +118,7 @@ class SessionFormBloc extends Bloc<SessionFormEvent, SessionFormState> {
       (attr["tableRows"] as Set).remove(event.row);
 
     } else if (event is PostSession) {
-      HTTPClient client = HTTPClient("35.178.208.241:80");
+      HTTPClient client = HTTPClient(kiloServerIP);
       client.post("sessions", event.session);
     }
 

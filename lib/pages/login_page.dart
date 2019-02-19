@@ -36,6 +36,11 @@ class _LoginPageState extends State<LoginPage> {
           decoration: InputDecoration(labelText: "Password"),
           obscureText: true,
           controller: this._passwordController,
+        ),
+
+        FlatButton(
+          onPressed: () => this._bloc.dispatch(Submit(context)),
+          child: Text("Login")
         )
       ],
     ),
