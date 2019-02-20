@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:kilo/utils.dart';
 import 'package:kilo/models/set_row.dart';
 import 'package:kilo/models/http_client.dart';
-import 'package:redux/redux.dart';
 
 
 @immutable
@@ -119,7 +118,7 @@ class SessionFormBloc extends Bloc<SessionFormEvent, SessionFormState> {
       (attr["tableRows"] as Set).remove(event.row);
 
     } else if (event is PostSession) {
-      HTTPClient client = HTTPClient("35.178.208.241:80");
+      HTTPClient client = HTTPClient(kiloServerIP);
       client.post("sessions", event.session);
     }
 

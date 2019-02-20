@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:kilo/global_state.dart';
 import 'package:kilo/pages/intro_page.dart';
+import 'package:kilo/pages/login_page.dart';
 import 'package:redux/redux.dart';
 
 
@@ -25,7 +26,7 @@ class Kilo extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: IntroPage(),
+      home: LoginPage(),
     )
   );
 }
