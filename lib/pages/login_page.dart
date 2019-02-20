@@ -83,11 +83,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) => StoreConnector<KiloState, bool>(
-    onWillChange: (bool loggedIn) {
-      if (loggedIn) {
-        this._toHome(context);
-      }
-    },
+    distinct: true,
     converter: (Store<KiloState> store) => store.state.loggedIn,
     builder: (BuildContext context, bool loggedIn) => Scaffold(
       body: BlocBuilder(
@@ -95,6 +91,12 @@ class _LoginPageState extends State<LoginPage> {
         builder: (BuildContext context, LoginState state) =>
           Center(child: this._buildForm()),
       )
-    )
+    ),
+    onWillChange: (bool loggedIn) {
+      if (loggedIn) {
+        print("***TO HOME***");
+        this._toHome(context);
+      }
+    },
   );
 }
