@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:kilo/blocs/login_bloc.dart';
+import 'package:kilo/global_state.dart';
+import 'package:kilo/pages/home_page.dart';
+import 'package:redux/redux.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -13,6 +17,11 @@ class _LoginPageState extends State<LoginPage> {
   final LoginBloc _bloc = LoginBloc();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  void _toHome(BuildContext context) => Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage())
+  );
 
   void _updateUsername() =>
     this._bloc.dispatch(UpdateUsername(this._usernameController.text));
@@ -38,10 +47,21 @@ class _LoginPageState extends State<LoginPage> {
           controller: this._passwordController,
         ),
 
-        FlatButton(
-          onPressed: () => this._bloc.dispatch(Submit(context)),
-          child: Text("Login")
-        )
+        BlocBuilder(
+          bloc: this._bloc,
+          builder: (BuildContext context, LoginState state) =>
+            StoreConnector<KiloState, Store<KiloState>> (
+              converter: (Store<KiloState> store) => store,
+              builder: (BuildContext context, Store<KiloState> store) =>
+                FlatButton(
+                  child: Text("Login"),
+                  onPressed: () => store.dispatch(
+                    SubmitCredentials(state.username, state.password)
+                  ),
+                ),
+            )
+        ),
+
       ],
     ),
   );
@@ -62,11 +82,19 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    body: BlocBuilder(
-      bloc: this._bloc,
-      builder: (BuildContext context, LoginState state) =>
-        Center(child: this._buildForm(),)
+  Widget build(BuildContext context) => StoreConnector<KiloState, bool>(
+    onWillChange: (bool loggedIn) {
+      if (loggedIn) {
+        this._toHome(context);
+      }
+    },
+    converter: (Store<KiloState> store) => store.state.loggedIn,
+    builder: (BuildContext context, bool loggedIn) => Scaffold(
+      body: BlocBuilder(
+        bloc: this._bloc,
+        builder: (BuildContext context, LoginState state) =>
+          Center(child: this._buildForm()),
+      )
     )
   );
 }
