@@ -61,7 +61,7 @@ void logger(Store<KiloState> store, action, NextDispatcher next) {
 void dataProvider(Store<KiloState> store, dynamic action, NextDispatcher next) async {
   if (action is FetchSessions) {
     Map<String, dynamic> json = await store.state.client.get("sessions");
-    next(Populate(json["_items"] as List));
+    next(Populate((json["_items"] as List) ?? []));
 
   } else if (action is SubmitCredentials) {
     store.state.client.setAuth(action.username, action.password);
