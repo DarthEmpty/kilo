@@ -38,21 +38,25 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      title: Text(this.widget.title),
-    ),
+  Widget build(BuildContext context) => WillPopScope(
+    onWillPop: () async => false,
+    child: Scaffold(
+      appBar: AppBar(
+        title: Text(this.widget.title),
+        automaticallyImplyLeading: false,
+      ),
 
-    body: StoreConnector<KiloState, List>(
-      onInit: (Store<KiloState> store) => store.dispatch(FetchSessions()),
-      converter: (Store<KiloState> store) => store.state.sessions,
-      builder: (BuildContext context, List sessions) => this._buildList(sessions),
-    ),
+      body: StoreConnector<KiloState, List>(
+        onInit: (Store<KiloState> store) => store.dispatch(FetchSessions()),
+        converter: (Store<KiloState> store) => store.state.sessions,
+        builder: (BuildContext context, List sessions) => this._buildList(sessions),
+      ),
 
-    floatingActionButton: FloatingActionButton(
-      child: Icon(FontAwesomeIcons.plus),
-      tooltip: 'Create a new session',
-      onPressed: () => this._toSessionForm(context),
-    ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(FontAwesomeIcons.plus),
+        tooltip: 'Create a new session',
+        onPressed: () => this._toSessionForm(context),
+      ),
+    )
   );
 }
