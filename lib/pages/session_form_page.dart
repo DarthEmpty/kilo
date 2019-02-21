@@ -131,7 +131,9 @@ class _SessionFormPageState extends State<SessionFormPage> {
           ],
         ),
 
-        Table(children: state.tableRows.map((row) => row.widget).toList()),
+        Table(children: state.tableRows.map(
+          (row) => row.widget
+        ).toList().reversed.toList()),
       ],
     ),
   );

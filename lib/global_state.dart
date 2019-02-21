@@ -71,7 +71,7 @@ void dataProvider(Store<KiloState> store, dynamic action, NextDispatcher next) a
 
 KiloState kiloReducer(KiloState currentState, dynamic action) {
   if (action is Populate) {
-    action.sessions.sort((a, b) => a["date"].compareTo(b["date"]) as int);
+    action.sessions.sort((a, b) => (a["date"].compareTo(b["date"]) as int) * -1);
     return KiloState(
       client: currentState.client,
       loggedIn: currentState.loggedIn,
@@ -81,7 +81,7 @@ KiloState kiloReducer(KiloState currentState, dynamic action) {
   } else if (action is AddToSessions) {
     List sessions = currentState.sessions;
     sessions.add(action.session);
-    sessions.sort((a, b) => a["date"].compareTo(b["date"]) as int);
+    sessions.sort((a, b) => (a["date"].compareTo(b["date"]) as int) * -1);
     return KiloState(
       client: currentState.client,
       loggedIn: currentState.loggedIn,
