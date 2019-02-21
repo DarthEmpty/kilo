@@ -41,6 +41,11 @@ class Populate {
   Populate(this.sessions);
 }
 
+class PostSession {
+  final Map<String, dynamic> session;
+  PostSession(this.session);
+}
+
 class AddToSessions {
   final Map<String, dynamic> session;
   AddToSessions(this.session);
@@ -56,12 +61,16 @@ void logger(Store<KiloState> store, action, NextDispatcher next) {
 void dataProvider(Store<KiloState> store, dynamic action, NextDispatcher next) async {
   if (action is FetchSessions) {
     Map<String, dynamic> json = await store.state.client.get("sessions");
-    next(Populate(json["_items"] as List));
+    next(Populate((json["_items"] as List) ?? []));
 
   } else if (action is SubmitCredentials) {
     store.state.client.setAuth(action.username, action.password);
     int status = await store.state.client.head("accounts/${action.username}");
     next(ResolveLogIn(status));
+
+  } else if (action is PostSession) {
+    store.state.client.post("sessions", action.session);
+    next(AddToSessions(action.session));
 
   } else {
     next(action);
@@ -71,7 +80,7 @@ void dataProvider(Store<KiloState> store, dynamic action, NextDispatcher next) a
 
 KiloState kiloReducer(KiloState currentState, dynamic action) {
   if (action is Populate) {
-    action.sessions.sort((a, b) => a["date"].compareTo(b["date"]) as int);
+    action.sessions.sort((a, b) => (a["date"].compareTo(b["date"]) as int) * -1);
     return KiloState(
       client: currentState.client,
       loggedIn: currentState.loggedIn,
@@ -81,7 +90,7 @@ KiloState kiloReducer(KiloState currentState, dynamic action) {
   } else if (action is AddToSessions) {
     List sessions = currentState.sessions;
     sessions.add(action.session);
-    sessions.sort((a, b) => a["date"].compareTo(b["date"]) as int);
+    sessions.sort((a, b) => (a["date"].compareTo(b["date"]) as int) * -1);
     return KiloState(
       client: currentState.client,
       loggedIn: currentState.loggedIn,

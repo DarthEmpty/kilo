@@ -131,7 +131,9 @@ class _SessionFormPageState extends State<SessionFormPage> {
           ],
         ),
 
-        Table(children: state.tableRows.map((row) => row.widget).toList()),
+        Table(children: state.tableRows.map(
+          (row) => row.widget
+        ).toList().reversed.toList()),
       ],
     ),
   );
@@ -179,8 +181,7 @@ class _SessionFormPageState extends State<SessionFormPage> {
                 icon: Icon(FontAwesomeIcons.check),
                 onPressed: () {
                   if (this._formKey.currentState.validate()) {
-                    store.dispatch(AddToSessions(state.toJson()));
-                    this._bloc.dispatch(PostSession(state.toJson()));
+                    store.dispatch(PostSession(state.toJson()));
                     this._toHome(context);
                   }
                 },
