@@ -41,6 +41,11 @@ class Populate {
   Populate(this.sessions);
 }
 
+class PostSession {
+  final Map<String, dynamic> session;
+  PostSession(this.session);
+}
+
 class AddToSessions {
   final Map<String, dynamic> session;
   AddToSessions(this.session);
@@ -62,6 +67,10 @@ void dataProvider(Store<KiloState> store, dynamic action, NextDispatcher next) a
     store.state.client.setAuth(action.username, action.password);
     int status = await store.state.client.head("accounts/${action.username}");
     next(ResolveLogIn(status));
+
+  } else if (action is PostSession) {
+    store.state.client.post("sessions", action.session);
+    next(AddToSessions(action.session));
 
   } else {
     next(action);
